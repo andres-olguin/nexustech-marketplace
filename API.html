@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Directorio de Usuarios</title>
+    <style>
+        .oculto { display: none; }
+        .error { color: red; }
+        .tarjeta { border: 1px solid #ccc; padding: 10px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Directorio de Usuarios</h1>
+    <button id="cargarBtn">Cargar Usuarios</button>
+
+    <!-- Estados de la interfaz -->
+    <p id="cargando" class="oculto">⏳ Cargando datos, por favor espera...</p>
+    <p id="error" class="error oculto"></p>
+    
+    <!-- Contenedor de resultados -->
+    <div id="resultados"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
