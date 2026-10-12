@@ -559,3 +559,58 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+//DOM
+const btnCargar = document.getElementById('cargarBtn');
+const divResultados = document.getElementById('resultados');
+const msjCargando = document.getElementById('cargando');
+const msjError = document.getElementById('error');
+
+// Función principal
+async function obtenerUsuarios() {
+    // Manejo de Carga: Mostrar "Cargando" y limpiar datos previos
+    msjCargando.classList.remove('oculto');
+    msjError.classList.add('oculto');
+    divResultados.innerHTML = '';
+
+    try {
+        //Implementar Fetch
+        const respuesta = await fetch('https://jsonplaceholder.typicode.com/users');
+
+        // Valida (reza que no sea un error404)
+        if (!respuesta.ok) {
+            throw new Error(`Error en el servidor: ${respuesta.status}`);
+        }
+
+        const usuarios = await respuesta.json();
+
+        // Resultados
+        if (usuarios.length === 0) {
+            divResultados.innerHTML = '<p>No se encontraron usuarios.</p>';
+            return;
+        }
+
+        // Crear elementos HTML para cada usuario
+        usuarios.forEach(usuario => {
+            const tarjeta = document.createElement('div');
+            tarjeta.classList.add('tarjeta');
+            tarjeta.innerHTML = `
+                <h3>${usuario.name}</h3>
+                <p><strong>Email:</strong> ${usuario.email}</p>
+                <p><strong>Compañía:</strong> ${usuario.company.name}</p>
+            `;
+            divResultados.appendChild(tarjeta);
+        });
+
+    } catch (error) {
+        //Control(Problemas de red, URLs incorrectas, etc.)
+        console.error("Detalle del error:", error);
+        msjError.textContent = ` Hubo un problema al cargar los datos: ${error.message}`;
+        msjError.classList.remove('oculto');
+    } finally {
+        //Final Carga: Ocultar el mensaje de "Cargando" siempre (haya éxito o error)
+        msjCargando.classList.add('oculto');
+    }
+}
+
+btnCargar.addEventListener('click', obtenerUsuarios);
