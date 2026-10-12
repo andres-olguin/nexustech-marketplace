@@ -568,7 +568,7 @@ const msjError = document.getElementById('error');
 
 // Función principal
 async function obtenerUsuarios() {
-    // Manejo de Carga: Mostrar "Cargando" y limpiar datos previos
+    // Manejo de Carga: Muestra "Cargando" y limpiar datos previos
     msjCargando.classList.remove('oculto');
     msjError.classList.add('oculto');
     divResultados.innerHTML = '';
@@ -590,7 +590,7 @@ async function obtenerUsuarios() {
             return;
         }
 
-        // Crear elementos HTML para cada usuario
+        // Crear elementos HTML al usuario
         usuarios.forEach(usuario => {
             const tarjeta = document.createElement('div');
             tarjeta.classList.add('tarjeta');
@@ -608,7 +608,7 @@ async function obtenerUsuarios() {
         msjError.textContent = ` Hubo un problema al cargar los datos: ${error.message}`;
         msjError.classList.remove('oculto');
     } finally {
-        //Final Carga: Ocultar el mensaje de "Cargando" siempre (haya éxito o error)
+        //Final ocultar el "Cargando" ( si es que hay éxito o error)
         msjCargando.classList.add('oculto');
     }
 }
