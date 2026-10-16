@@ -21,7 +21,7 @@ tecnología, apuntes). Actualmente usan grupos dispersos en redes sociales, lo q
 *   **Fetch API** para el consumo de datos externos.
 
 ## Estructura
-src/
+src/  
 ├── assets/         # Imágenes e íconos
 ├── components/     # Componentes reutilizables (Card, Navbar, Filtros)
 ├── data/           # Archivos JSON locales (productos iniciales)
