@@ -22,19 +22,19 @@ tecnología, apuntes). Actualmente usan grupos dispersos en redes sociales, lo q
 
 ## Estructura
 src/  
-  ├── assets/         # Imágenes e íconos
+  ├── assets/         
   
-  ├── components/     # Componentes reutilizables (Card, Navbar, Filtros)
+  ├── components/    
   
-  ├── data/           # Archivos JSON locales (productos iniciales)
+  ├── data/           
   
-  ├── pages/          # Vistas principales (Home, DetalleProducto, Carrito)
+  ├── pages/          
   
-  ├── services/       # Funciones para llamadas a la API (fetch)
+  ├── services/       
   
-  ├── App.jsx         # Enrutamiento y configuración global
+  ├── App.jsx         
   
-  └── main.jsx        # Punto de entrada
+  └── main.jsx        
 
 
 ## Comandos de Git para Subir Cambios
