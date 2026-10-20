@@ -560,57 +560,60 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-//DOM
-const btnCargar = document.getElementById('cargarBtn');
-const divResultados = document.getElementById('resultados');
-const msjCargando = document.getElementById('cargando');
-const msjError = document.getElementById('error');
+// Referencias a los elementos de tu HTML
+const grillaProductos = document.getElementById('grillaProductos');
+const contadorProductos = document.getElementById('contadorProductos');
+const rangePrecio = document.getElementById('rangePrecio');
+const labelPrecioMax = document.getElementById('labelPrecioMax');
 
-// Función principal
-async function obtenerUsuarios() {
-    // Manejo de Carga: Muestra "Cargando" y limpiar datos previos
-    msjCargando.classList.remove('oculto');
-    msjError.classList.add('oculto');
-    divResultados.innerHTML = '';
-
+//Función para usar la API
+async function cargarCatalogoAPI() {
+    // Mostrar estado de carga en tu contador
+    contadorProductos.innerHTML = 'Obteniendo catálogo desde la API...';
+    
     try {
-        //Implementar Fetch
-        const respuesta = await fetch('https://jsonplaceholder.typicode.com/users');
-
-        // Valida (reza que no sea un error404)
+        //Llamada a la API de Fake Store
+        const respuesta = await fetch('https://fakestoreapi.com/products');
+        
         if (!respuesta.ok) {
-            throw new Error(`Error en el servidor: ${respuesta.status}`);
+            throw new Error('Error en la respuesta del servidor');
         }
-
-        const usuarios = await respuesta.json();
-
-        // Resultados
-        if (usuarios.length === 0) {
-            divResultados.innerHTML = '<p>No se encontraron usuarios.</p>';
-            return;
-        }
-
-        // Crear elementos HTML al usuario
-        usuarios.forEach(usuario => {
-            const tarjeta = document.createElement('div');
-            tarjeta.classList.add('tarjeta');
-            tarjeta.innerHTML = `
-                <h3>${usuario.name}</h3>
-                <p><strong>Email:</strong> ${usuario.email}</p>
-                <p><strong>Compañía:</strong> ${usuario.company.name}</p>
+        
+        const productos = await respuesta.json();
+        
+        // Limpiar
+        grillaProductos.innerHTML = '';
+        
+        //Muestra cada producto en tu grilla
+        productos.forEach(producto => {
+            // Se utiliza la estructura del Bootstrap
+            const tarjetaHTML = `
+                <div class="col">
+                    <div class="card h-100 bg-dark text-light border-secondary">
+                        <img src="${producto.image}" class="card-img-top p-3" alt="${producto.title}" style="height: 200px; object-fit: contain; background: white;">
+                        <div class="card-body d-flex flex-column">
+                            <h6 class="card-title text-truncate" title="${producto.title}">${producto.title}</h6>
+                            <p class="card-text small text-muted text-truncate">${producto.category}</p>
+                            <span class="text-info fw-bold mt-auto">$${producto.price}</span>
+                        </div>
+                    </div>
+                </div>
             `;
-            divResultados.appendChild(tarjeta);
+            grillaProductos.insertAdjacentHTML('beforeend', tarjetaHTML);
         });
-
+        
+        //Actualizar el contador con la cantidad real
+        contadorProductos.innerHTML = `Mostrando ${productos.length} productos`;
+        
     } catch (error) {
-        //Control(Problemas de red, URLs incorrectas, etc.)
-        console.error("Detalle del error:", error);
-        msjError.textContent = ` Hubo un problema al cargar los datos: ${error.message}`;
-        msjError.classList.remove('oculto');
-    } finally {
-        //Final ocultar el "Cargando" ( si es que hay éxito o error)
-        msjCargando.classList.add('oculto');
+        //Manejo de errores visual en la interfaz
+        console.error("Error al cargar la API:", error);
+        grillaProductos.innerHTML = `<div class="col-12 text-danger">❌ Hubo un problema al cargar los productos. Por favor, intenta de nuevo más tarde.</div>`;
+        contadorProductos.innerHTML = 'Error de conexión';
     }
 }
+
+//Ejecutar la función cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', cargarCatalogoAPI);
 
 btnCargar.addEventListener('click', obtenerUsuarios);
