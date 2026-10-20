@@ -1,0 +1,13 @@
+[
+  {
+    "codigo": "9876543210",
+    "fecha": "2026-10-09T12:00:00.000Z",
+    "nombre": "Cliente de demostración",
+    "ciudad": "Viña del Mar",
+    "direccion": "Dirección de ejemplo",
+    "origen": "Santiago",
+    "paso": 2,
+    "total": 450000,
+    "items": [{ "id": "demo", "nombre": "Equipo de demostración", "precio": 450000, "cantidad": 1, "acabado": "Gris Espacial" }]
+  }
+]
