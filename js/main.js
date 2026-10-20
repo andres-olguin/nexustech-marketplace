@@ -611,3 +611,6 @@ async function cargarCatalogoAPI() {
         contadorProductos.innerHTML = 'Error de conexión';
     }
 }
+
+//ejecuta esto cuando el dom este cargado
+document.addEventListener('DOMContentLoaded', cargarCatalogoAPI);
