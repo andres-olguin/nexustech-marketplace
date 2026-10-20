@@ -560,7 +560,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// Referencias a los elementos de tu HTML
+// Referencias a los elementos de la HTML
 const grillaProductos = document.getElementById('grillaProductos');
 const contadorProductos = document.getElementById('contadorProductos');
 const rangePrecio = document.getElementById('rangePrecio');
@@ -568,11 +568,11 @@ const labelPrecioMax = document.getElementById('labelPrecioMax');
 
 //Función para usar la API
 async function cargarCatalogoAPI() {
-    // Mostrar estado de carga en tu contador
+    //estado de carga
     contadorProductos.innerHTML = 'Obteniendo catálogo desde la API...';
     
     try {
-        //Llamada a la API de Fake Store
+        //Llama a la API de Fake Store
         const respuesta = await fetch('https://fakestoreapi.com/products');
         
         if (!respuesta.ok) {
@@ -586,7 +586,6 @@ async function cargarCatalogoAPI() {
         
         //Muestra cada producto en tu grilla
         productos.forEach(producto => {
-            // Se utiliza la estructura del Bootstrap
             const tarjetaHTML = `
                 <div class="col">
                     <div class="card h-100 bg-dark text-light border-secondary">
@@ -602,18 +601,85 @@ async function cargarCatalogoAPI() {
             grillaProductos.insertAdjacentHTML('beforeend', tarjetaHTML);
         });
         
-        //Actualizar el contador con la cantidad real
+        //Actualizar la cantidad que haya
         contadorProductos.innerHTML = `Mostrando ${productos.length} productos`;
         
     } catch (error) {
-        //Manejo de errores visual en la interfaz
+        //Manejo de errores visual de la interfaz
         console.error("Error al cargar la API:", error);
         grillaProductos.innerHTML = `<div class="col-12 text-danger"> Hubo un problema al cargar los productos. Por favor, intenta de nuevo más tarde.</div>`;
         contadorProductos.innerHTML = 'Error de conexión';
     }
 }
 
+//API para moneda(eliminar api si falla paguina)
 //Ejecutar la función cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', cargarCatalogoAPI);
 
 btnCargar.addEventListener('click', obtenerUsuarios);
+
+//Referencias al DOM
+const grillaProductos = document.getElementById('grillaProductos');
+const contadorProductos = document.getElementById('contadorProductos');
+const rangePrecio = document.getElementById('rangePrecio');
+const labelPrecioMax = document.getElementById('labelPrecioMax');
+
+//Función para llamar las APIs
+async function cargarCatalogoAPI() {
+    contadorProductos.innerHTML = 'Calculando tipo de cambio y cargando productos...';
+    
+    try {
+        //Obtener el valor del Dólar a CLP
+        const respuestaMoneda = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+        if (!respuestaMoneda.ok) throw new Error('Error al obtener la tasa de cambio');
+        
+        const datosMoneda = await respuestaMoneda.json();
+        const valorDolarCLP = datosMoneda.rates.CLP; 
+      //muestra el valor del peso chileno
+        
+        //Obtener los productos
+        const respuestaProductos = await fetch('https://fakestoreapi.com/products');
+        if (!respuestaProductos.ok) throw new Error('Error al cargar productos');
+        
+        const productos = await respuestaProductos.json();
+        
+        // Limpiar la grilla antes de insertar
+        grillaProductos.innerHTML = '';
+        
+        //Dibujar cada producto calculando el precio final
+        productos.forEach(producto => {
+            // Multiplica el precio (USD) del valor del dólar a (CLP) y aproximamos
+            const precioConvertido = Math.round(producto.price * valorDolarCLP);
+            
+            // Formatea para que este como la moneda chilena (ej: $ 15.000)
+            const precioFormateado = new Intl.NumberFormat('es-CL', {
+                style: 'currency',
+                currency: 'CLP'
+            }).format(precioConvertido);
+
+            const tarjetaHTML = `
+                <div class="col">
+                    <div class="card h-100 bg-dark text-light border-secondary">
+                        <img src="${producto.image}" class="card-img-top p-3" alt="${producto.title}" style="height: 200px; object-fit: contain; background: white;">
+                        <div class="card-body d-flex flex-column">
+                            <h6 class="card-title text-truncate" title="${producto.title}">${producto.title}</h6>
+                            <p class="card-text small text-muted text-truncate">${producto.category}</p>
+                            <span class="text-info fw-bold mt-auto">${precioFormateado}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            grillaProductos.insertAdjacentHTML('beforeend', tarjetaHTML);
+        });
+        
+        contadorProductos.innerHTML = `Mostrando ${productos.length} productos`;
+        
+    } catch (error) {
+        console.error("Error en las APIs:", error);
+        grillaProductos.innerHTML = `<div class="col-12 text-danger">❌ Hubo un problema al cargar el catálogo o la tasa de cambio.</div>`;
+        contadorProductos.innerHTML = 'Error de conexión';
+    }
+}
+
+//Ejecutar la función cuando el dom este listo
+document.addEventListener('DOMContentLoaded', cargarCatalogoAPI);
