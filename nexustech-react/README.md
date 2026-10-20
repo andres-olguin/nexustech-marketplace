@@ -1,0 +1,155 @@
+# NexusTech Store · Campus Hub UNAB
+
+Taller Evaluado 2: adaptación a React del marketplace de hardware y soluciones informáticas del Taller Evaluado 1. Esta entrega continúa los archivos proporcionados y desarrolla la parte visual en componentes reutilizables, con una aplicación funcional para demostrarlos.
+
+## Integrantes
+
+Nombres tomados del README del Taller 1:
+
+- Miguel Margas.
+- Enrique Chamys.
+- Maximiliano Valdés.
+- Andrés Olguín.
+
+La distribución definitiva y las contribuciones efectivas deben registrarse en el repositorio del equipo.
+
+## Problemática y usuarios
+
+Las publicaciones de tecnología se dispersan entre grupos de mensajería y redes sociales. NexusTech reúne un catálogo que permite buscar, filtrar, guardar productos y simular una compra con seguimiento.
+
+Los usuarios objetivo son estudiantes y miembros de la comunidad universitaria interesados en hardware, periféricos, equipos de trabajo y soluciones informáticas.
+
+## Continuidad con el primer trabajo
+
+Se conservan NexusTech, Campus Hub UNAB, la identidad oscura con cian, las cuatro categorías, los precios en CLP y la combinatoria original de 2.400 productos, con 24 por página.
+
+El código que antes creaba HTML con innerHTML pasa a componentes React y renderizado de listas con keys. Los formularios, el carrito y los favoritos se conectan mediante props y callbacks. Acceso, contacto y rastreo se unifican con la tienda; los archivos recibidos de acceso y contacto todavía tenían textos de VetConnect.
+
+Los originales están en base-taller1, sin modificaciones, como referencia. La aplicación ejecutable es la de la raíz y src. docs/MIGRACION.md muestra las correspondencias.
+
+## Funcionalidades
+
+- Catálogo, búsqueda sin distinguir tildes, categorías, presupuesto, orden y paginación.
+- Tarjetas reutilizables, detalle, reseñas de ejemplo y selección de cantidad y acabado.
+- Favoritos con su propia pantalla.
+- Carrito por producto y acabado, ajuste de cantidades y totales.
+- Publicación validada, eliminación con confirmación y opción de deshacer.
+- Pedido simulado con datos de despacho y código de seguimiento.
+- Rastreo del pedido creado, guía original 9876543210 y avance simulado de estados.
+- Acceso y perfil locales; formulario de contacto que registra consultas de demostración.
+- Persistencia local de publicaciones, favoritos, carrito, pedidos, perfil y consultas.
+- Referencia USD mediante una consulta real a una API pública.
+- Navegación y formularios adaptables a computadora, tableta y celular.
+
+## Ejecución
+
+Para ver la demostración sin instalar, abrir VISTA_PREVIA.html en un navegador actualizado. Las imágenes y estilos están incluidos. La función de referencia USD necesita internet.
+
+Para editar, usar Node.js 22.12 o posterior de la rama 22, o Node.js 24. Abrir esta carpeta en Visual Studio Code y ejecutar:
+
+    npm install
+    npm run dev
+
+Abrir la dirección que muestra Vite. Para comprobar y visualizar la compilación:
+
+    npm run build
+    npm run preview
+
+Se utilizó Node.js 24 para la preparación. package-lock.json conserva las versiones resueltas.
+
+## Organización
+
+| Carpeta o archivo | Responsabilidad |
+| --- | --- |
+| src/components/ui | Botones, campos, mensajes, tarjetas, diálogo, imágenes e íconos. |
+| src/components/layout | Cabecera, navegación y pie común. |
+| src/components/catalog | Tarjeta de producto, filtros, paginación, presentación y referencia USD. |
+| src/components/shop | Detalle, carrito, publicación y pedido. |
+| src/pages | Catálogo, favoritos mediante CatalogPage, rastreo, contacto y acceso. |
+| src/hooks/useShop.js | Estado y acciones locales de la tienda. |
+| src/hooks/useHashRoute.js | Navegación por hash y respuesta a atrás/adelante. |
+| src/hooks/useExchangeRate.js | Estados de carga, respuesta y error de la API. |
+| src/hooks/useValidatedForm.js | Valores, validación y foco compartidos entre formularios. |
+| src/services/publicApi.js | Fetch, validación de la respuesta y timeout. |
+| src/data | Configuración original del catálogo, generador y pedido inicial. |
+| src/assets | Fotografías locales, ilustración de respaldo y recursos propios. |
+| src/styles/styles.css | Identidad NexusTech, estados y media queries. |
+| docs | Diseño previo, wireframes, migración y verificación. |
+| GUIA_PARTE_4.md | Guion y explicación para estudiar. |
+| INTEGRACION.md | Props, contratos y coordinación con el equipo. |
+
+App.jsx conecta vistas, controlador y ventanas. Bootstrap se importa antes del CSS propio. Se usa su CSS para controles y utilidades; la apertura de ventanas y las interacciones se gestionan con React.
+
+## Datos y persistencia
+
+catalogConfig.json conserva los datos de generación del main.js original. createProducts produce los 2.400 objetos iniciales; no se insertan todos en el DOM a la vez.
+
+useShop conserva en localStorage, bajo nexustech-react-v2, las publicaciones añadidas, las eliminaciones, los favoritos, las líneas del carrito, los pedidos, el perfil y las consultas. El catálogo inicial se vuelve a generar y no se duplica completo en el almacenamiento.
+
+La contraseña de ejemplo solo valida el formulario y no se guarda. Las ventanas, filtros y avisos son estados temporales. Los avisos normales se cierran automáticamente; el aviso que permite deshacer permanece hasta que se realiza otra acción o se cierra.
+
+Si el navegador bloquea el almacenamiento, aparece un mensaje y la aplicación funciona durante la sesión. Restaurar demostración requiere confirmar y solo restablece los datos de este proyecto.
+
+## API pública
+
+| Elemento | Implementación |
+| --- | --- |
+| Nombre | Indicadores económicos diarios de mindicador.cl. |
+| Sitio y referencia oficial | https://mindicador.cl |
+| Endpoint | https://mindicador.cl/api/dolar |
+| Método | GET. |
+| Parámetros | Ninguno. |
+| Clave o autenticación | La consulta pública utilizada no requirió una clave. |
+| Respuesta usada | codigo y los campos valor y fecha de serie. |
+| Selección | Registro válido con fecha más reciente. |
+| Aporte | Comparar precios de hardware en CLP con una referencia aproximada en USD. |
+| Cálculo | Precio CLP dividido por el valor CLP de un USD. |
+| Ubicación | Panel de filtros, tarjetas, detalle y total del carrito. |
+| Carga | Mensaje mientras se consulta; los productos siguen disponibles. |
+| Error | Mensaje y reintento; se conservan los precios CLP. |
+| Timeout | Ocho segundos. |
+| Consulta | Se inicia al pulsar Ver referencia USD; no hay sondeo automático. |
+| Atribución | Enlace visible a mindicador.cl y fecha del dato. |
+
+El dato se identifica con su fecha; no se presenta como una cotización instantánea. El pedido siempre se calcula en CLP. No se utiliza una tasa inventada si falla la consulta.
+
+La consulta y su respuesta se verificaron durante la preparación. El sitio principal devolvió un error en ese momento, aunque el endpoint respondió. No se pudo confirmar una cuota ni una licencia de reutilización específica; la persona responsable de la API debe revisar las condiciones del proveedor antes de la entrega definitiva. Los detalles de las pruebas están en docs/VERIFICACION.md.
+
+## Diseño previo y parte 4
+
+docs/DISENO.md define la navegación, jerarquía, flujos, componentes y criterios visuales antes de la implementación de esta adaptación. Los wireframes muestran catálogo y celular.
+
+La persona 4 puede centrarse en ProductCard, Button, Field, Dialog, Navbar, los recursos locales y las media queries. El controlador de la tienda y el servicio de API se incluyen para que la interfaz pueda demostrarse y conectarse con el trabajo de los otros integrantes.
+
+## Uso de Inteligencia Artificial
+
+- Herramienta: ChatGPT.
+- Propósito: adaptar el trabajo original a React, proponer componentes y estilos responsive, conectar una demostración funcional, revisar errores y preparar documentación.
+- Consultas representativas: «Hace la parte 4», «Quiero que lo mejores» y el pedido de trabajar sobre los archivos del primer taller.
+- Resultado: proyecto, vista previa, recursos organizados, diseño, guía e integración.
+- Revisión durante la preparación: comparación del catálogo con el generador original, compilación y pruebas visuales y funcionales.
+- Modificación humana: completar con las adaptaciones y correcciones que efectivamente realice cada integrante.
+- Aprendizaje: completar después de estudiar qué hacen los componentes, props, estados, callbacks y efectos utilizados.
+
+No atribuir al equipo revisiones, commits o decisiones que todavía no realizó. La defensa requiere comprender el código que se presente.
+
+## Límites de la demostración
+
+Los productos y reseñas son datos simulados del trabajo original. No hay verificación real de hardware ni garantías comerciales. Compra, seguimiento, sesión y contacto son demostraciones locales: no hay cobros, envío físico, verificación de credenciales ni envío de correos.
+
+La persistencia corresponde a este navegador y no se sincroniza entre personas o equipos. La referencia USD depende de la conexión y del proveedor. Las fotografías se incrustan para disponer de una vista previa autónoma, lo que aumenta el tamaño del JavaScript compilado; Vite informa un aviso de tamaño de chunk.
+
+## Git y colaboración
+
+Integrar esta carpeta en el repositorio del equipo, utilizando develop y una rama feature/componentes-nexustech. Hacer commits descriptivos durante la adaptación y abrir un Pull Request hacia develop. La integración final a main corresponde al equipo.
+
+Este paquete no crea ni acredita commits o Pull Requests de los integrantes.
+
+## Referencias técnicas
+
+- [React: props y children](https://react.dev/learn/passing-props-to-a-component)
+- [React: efectos](https://react.dev/learn/synchronizing-with-effects)
+- [Bootstrap: breakpoints](https://getbootstrap.com/docs/5.3/layout/breakpoints/)
+- [Vite](https://vite.dev/guide/)
+- [Diálogo nativo](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/showModal)
+- [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)

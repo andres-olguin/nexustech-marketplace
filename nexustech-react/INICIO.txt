@@ -1,0 +1,21 @@
+NEXUSTECH · TALLER 2 EN REACT
+
+Este proyecto continúa los archivos de tu Taller 1.
+
+PARA VERLO:
+Abre VISTA_PREVIA.html después de descomprimir el ZIP.
+La tienda se puede probar sin internet.
+La consulta de referencia USD requiere conexión.
+
+PARA TRABAJAR EL CÓDIGO:
+Abre esta carpeta en Visual Studio Code.
+En la terminal:
+npm install
+npm run dev
+
+TU PARTE 4:
+Lee GUIA_PARTE_4.md e INTEGRACION.md.
+
+README.md explica el proyecto y la API.
+docs/DISENO.md y sus SVG contienen la propuesta visual.
+base-taller1 conserva tus archivos originales para comparar.
