@@ -608,7 +608,7 @@ async function cargarCatalogoAPI() {
     } catch (error) {
         //Manejo de errores visual en la interfaz
         console.error("Error al cargar la API:", error);
-        grillaProductos.innerHTML = `<div class="col-12 text-danger">❌ Hubo un problema al cargar los productos. Por favor, intenta de nuevo más tarde.</div>`;
+        grillaProductos.innerHTML = `<div class="col-12 text-danger"> Hubo un problema al cargar los productos. Por favor, intenta de nuevo más tarde.</div>`;
         contadorProductos.innerHTML = 'Error de conexión';
     }
 }
