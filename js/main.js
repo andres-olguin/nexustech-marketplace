@@ -573,7 +573,7 @@ async function cargarCatalogoAPI() {
     
     try {
         //Llamada a la API de Fake Store
-        const respuesta = await fetch('https://fakestoreapi.com/product');
+        const respuesta = await fetch('https://fakestoreapi.com/products');
         
         if (!respuesta.ok) {
             throw new Error('Error en la respuesta del servidor');
