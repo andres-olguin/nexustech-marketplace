@@ -614,3 +614,4 @@ async function cargarCatalogoAPI() {
 
 //ejecuta esto cuando el dom este cargado
 document.addEventListener('DOMContentLoaded', cargarCatalogoAPI);
+btnCargar.addEventListener('click', obtenerUsuarios);
